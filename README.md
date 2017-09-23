@@ -12,4 +12,4 @@ Für den Benutzer ``foobar`` werden die Public-Keys in der Datei ``/etc/authoriz
 
 # Credits
 
-Die Idee für dieses Image ist beim Docker-Image von https://github.com/panubo/docker-sshd 
+Die Idee für dieses Image stammt von https://github.com/panubo/docker-sshd. 
