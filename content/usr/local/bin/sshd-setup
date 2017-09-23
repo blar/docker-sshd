@@ -1,0 +1,7 @@
+#!/usr/bin/env sh
+
+set -x
+
+apk update
+apk add openssh
+chmod g-w,o-w /etc

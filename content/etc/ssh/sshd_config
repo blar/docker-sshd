@@ -1,0 +1,4 @@
+AuthorizedKeysFile /etc/authorized_keys/%u
+PasswordAuthentication no
+PermitEmptyPasswords no
+PubkeyAuthentication yes

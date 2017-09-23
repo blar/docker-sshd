@@ -1,0 +1,30 @@
+#!/usr/bin/env sh
+
+set -e
+
+ssh-keygen -A
+chmod 755 /etc/authorized_keys
+
+for file in $(ls /etc/authorized_keys/*); do
+    username=$(basename $file)
+    echo Add user $username
+    adduser -D $username
+    passwd -u $username -d
+    chown $username: $file 
+done
+
+if [ "$1" = "/usr/sbin/sshd" ]; then
+    # no detach
+    set -- "$@" "-D"
+
+    # Write logs to /dev/stderr
+    set -- "$@" "-e"
+
+    # Config file
+    set -- "$@" -f "/etc/ssh/sshd_config"
+
+    # Debug
+    # set -- "$@" -d
+fi
+
+exec "$@"
