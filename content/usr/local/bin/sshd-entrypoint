@@ -2,16 +2,10 @@
 
 set -e
 
+# Host-Keys generieren
 ssh-keygen -A
-chmod 755 /etc/authorized_keys
 
-for file in $(ls /etc/authorized_keys/*); do
-    username=$(basename $file)
-    echo Add user $username
-    adduser -D $username
-    passwd -u $username -d
-    chown $username: $file 
-done
+sshd-user-setup
 
 if [ "$1" = "/usr/sbin/sshd" ]; then
     # no detach

@@ -1,0 +1,16 @@
+#!/usr/bin/env sh
+
+# Benutzer anhand der Dateien in /etc/authorized_keys generieren. Der Name jeder Datei in diesem Verzeichnis entspricht
+# dem Benutzernamen der erstellt wird.
+
+set -e
+
+chmod 755 /etc/authorized_keys
+
+for file in $(ls /etc/authorized_keys/*); do
+    username=$(basename $file)
+    echo Add user $username
+    adduser -D $username
+    passwd -u $username -d
+    chown $username: $file 
+done
