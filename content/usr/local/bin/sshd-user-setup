@@ -9,6 +9,10 @@ chmod 755 /etc/authorized_keys
 
 for file in $(ls /etc/authorized_keys/*); do
     username=$(basename $file)
+    if getent passwd $username > /dev/null; then
+        echo User $username already exists >&2
+        continue
+    fi
     echo Add user $username
     adduser -D $username
     passwd -u $username -d
