@@ -18,3 +18,7 @@ for file in $(ls /etc/authorized_keys/*); do
     passwd -u $username -d
     chown $username: $file 
 done
+
+if [ -f "/etc/ssh/passwords" ]; then
+    chpasswd < /etc/ssh/passwords
+fi
