@@ -3,3 +3,4 @@ PasswordAuthentication no
 PermitRootLogin no
 PermitEmptyPasswords no
 PubkeyAuthentication yes
+Subsystem sftp internal-sftp
