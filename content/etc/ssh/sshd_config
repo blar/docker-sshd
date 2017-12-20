@@ -1,5 +1,5 @@
 AuthorizedKeysFile /etc/authorized_keys/%u
-PasswordAuthentication no
+PasswordAuthentication yes
 PermitRootLogin no
 PermitEmptyPasswords no
 PubkeyAuthentication yes
