@@ -1,36 +1,43 @@
 #!/usr/bin/env sh
 
-# Benutzer anhand der Dateien in /etc/authorized_keys generieren. Der Name jeder Datei in diesem Verzeichnis entspricht
-# dem Benutzernamen der erstellt wird.
-
 set -e
 
-chmod 755 /etc/authorized_keys
-
-for file in $(ls /etc/authorized_keys/*); do
-    username=$(basename $file)
-    if getent passwd $username > /dev/null; then
-        echo User $username already exists >&2
-        continue
-    fi
-    echo Add user $username
-    adduser -D $username
-    passwd -u $username -d
-    chown $username: $file 
-done
-
-if [ -f "/etc/ssh/passwords" ]; then
-    chpasswd < /etc/ssh/passwords
+if [ -d /run/secrets ]; then
+    chmod 755 /run/secrets
 fi
 
+# Import old public keys.
+if [ -d /etc/authorized_keys ]; then
+    for file in $(ls /etc/authorized_keys/*); do
+        username=$(basename $file);
+        cp $file /run/secrets/$username.pub
+    done
+fi
+
+# Create users for public keys.
 for file in $(ls /run/secrets/*.pub); do
     username=$(basename $file .pub)
-    if getent passwd $username > /dev/null; then
-        echo User $username already exists >&2
-        continue
+    if ! getent passwd $username > /dev/null; then
+        echo Add user $username
+        adduser -D $username
+        passwd -u $username -d
     fi
-    echo Add user $username
-    adduser -D $username
-    passwd -u $username -d
-    chown $username: $file 
+    chown $username: $file
 done
+
+# Create users and concat passwords for import.
+for file in $(ls /run/secrets/*.password); do
+    username=$(basename $file .password)
+    if ! getent passwd $username > /dev/null; then
+        echo Add user $username
+        adduser -D $username
+        passwd -u $username -d
+    fi
+    echo -n $username:$(cat $file) >> /tmp/passwords
+done
+
+# Import passwords.
+if [ -f /tmp/passwords ]; then
+    chpasswd < /tmp/passwords
+    rm /tmp/passwords
+fi
