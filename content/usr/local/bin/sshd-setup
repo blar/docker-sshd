@@ -2,6 +2,5 @@
 
 set -x
 
-apk update
-apk add openssh
+apk add --no-cache openssh
 chmod g-w,o-w /etc

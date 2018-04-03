@@ -1,6 +1,7 @@
-AuthorizedKeysFile /etc/authorized_keys/%u
+AuthorizedKeysFile /etc/authorized_keys/%u /run/secrets/%u.pub
 PasswordAuthentication yes
 PermitRootLogin no
 PermitEmptyPasswords no
+PasswordAuthentication yes
 PubkeyAuthentication yes
 Subsystem sftp internal-sftp

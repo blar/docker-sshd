@@ -22,3 +22,15 @@ done
 if [ -f "/etc/ssh/passwords" ]; then
     chpasswd < /etc/ssh/passwords
 fi
+
+for file in $(ls /run/secrets/*.pub); do
+    username=$(basename $file .pub)
+    if getent passwd $username > /dev/null; then
+        echo User $username already exists >&2
+        continue
+    fi
+    echo Add user $username
+    adduser -D $username
+    passwd -u $username -d
+    chown $username: $file 
+done
