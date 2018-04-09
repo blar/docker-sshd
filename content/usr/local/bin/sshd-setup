@@ -2,5 +2,5 @@
 
 set -x
 
-apk add --no-cache openssh-server openssh-sftp-server
+apk add --no-cache openssh-server openssh-sftp-server openssh-client
 chmod g-w,o-w /etc
